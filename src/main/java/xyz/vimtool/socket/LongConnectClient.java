@@ -16,7 +16,9 @@ public class LongConnectClient extends Thread {
 
     private static final String HOST = "127.0.0.1";
 
-    private static final int PORT = 5987;
+    private static final int PORT = 8088;
+
+    private static byte[] bytes;
 
     private Socket socket;
 
@@ -49,12 +51,15 @@ public class LongConnectClient extends Thread {
                 System.out.println("=====================开始发送心跳包==============");
                 while (true) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     System.out.println("发送心跳数据包");
-                    outStr.write("heart jjj beat".getBytes());
+                    for (byte b : bytes) {
+                        System.out.println(b);
+                    }
+                    outStr.write(bytes);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -84,9 +89,21 @@ public class LongConnectClient extends Thread {
     }
 
     public static void main(String[] args) throws Exception {
-        for (int i = 0; i < 10; i++) {
+        Protocol protocol = new Protocol();
+        protocol.setHead("LG");
+        protocol.setVersion((byte) 1);
+        protocol.setLength((byte) 25);
+        protocol.setType((byte) 0);
+        protocol.setMsn(1201708000036l);
+        protocol.setTime(0);
+        protocol.setLoad(false);
+        protocol.setRssi((byte) 31);
+        protocol.setReserve(0);
+        protocol.setTail("MH");
+        bytes = protocol.toBytes();
+//        for (int i = 0; i < 10; i++) {
             LongConnectClient longConnectClient = new LongConnectClient(new Socket(HOST, PORT));
             longConnectClient.start();
-        }
+//        }
     }
 }
