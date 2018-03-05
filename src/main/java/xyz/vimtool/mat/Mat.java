@@ -23,11 +23,11 @@ public class Mat {
 
         long msn = 1201708000040l;
 
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(3000, 11000, 60,
-                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(10000),
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(3000, 4000, 60,
+                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(3000),
                 Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 3000; i++) {
             pool.execute(new MatClient(new Socket(HOST, PORT), msn + i));
 //            executor.execute(new MatClient(new Socket(HOST, PORT), msn + i));
             Thread.sleep(1);

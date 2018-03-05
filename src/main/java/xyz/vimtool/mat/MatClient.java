@@ -141,7 +141,7 @@ public class MatClient extends Thread {
                         inputStream.read(bytes);
                         Protocol receiveProtocol = new Protocol(bytes);
 
-                        System.out.println("接收启动数据: " + protocol);
+                        System.out.println("接收启动数据: " + receiveProtocol);
 
                         //如果为启动请求，则返回启动应答数据，1/5的概率按摩垫启动应答失败
                         if (Protocol.TYPE_START == receiveProtocol.getType() && random.nextInt(10) > 1) {
@@ -151,7 +151,7 @@ public class MatClient extends Thread {
                             Protocol responseProtocol = new Protocol(protocol.toBytes());
                             responseProtocol.setType(Protocol.TYPE_START_RESPONSE);
 
-                            System.out.println("发送启动响应数据: " + protocol);
+                            System.out.println("发送启动响应数据: " + responseProtocol);
 
                             outputStream.write(responseProtocol.toBytes());
                             outputStream.flush();
