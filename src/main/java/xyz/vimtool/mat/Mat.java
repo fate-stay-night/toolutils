@@ -1,6 +1,7 @@
 package xyz.vimtool.mat;
 
 import java.net.Socket;
+import java.util.concurrent.*;
 
 /**
  * 按摩垫多线程模拟
@@ -16,13 +17,20 @@ public class Mat {
 
     private static final int PORT = 8088;
 
+    private static Executor executor = Executors.newCachedThreadPool();
+
     public static void main(String[] args) throws Exception {
 
         long msn = 1201708000040l;
 
-        for (int i = 0; i < 21; i++) {
-            new MatClient(new Socket(HOST, PORT), msn + i).start();
-            Thread.sleep(3000);
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(3000, 11000, 60,
+                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(10000),
+                Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
+
+        for (int i = 0; i < 10000; i++) {
+            pool.execute(new MatClient(new Socket(HOST, PORT), msn + i));
+//            executor.execute(new MatClient(new Socket(HOST, PORT), msn + i));
+            Thread.sleep(1);
         }
     }
 }

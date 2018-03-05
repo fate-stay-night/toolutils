@@ -109,7 +109,7 @@ public class MatClient extends Thread {
                             protocol.setTime(protocol.getTime() - 10 > 0 ? protocol.getTime() - 10 : 0);
                         }
 
-                        System.out.println("发送心跳数据: " + protocol);
+//                        System.out.println("发送心跳数据: " + protocol);
 
                         outputStream.write(protocol.toBytes());
                         outputStream.flush();
@@ -129,6 +129,12 @@ public class MatClient extends Thread {
         public void run() {
             try {
                 while (true) {
+                    //间隔10s发送心跳
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     //响应服务端发送数据请求
                     if (inputStream.available() > 0) {
                         byte[] bytes = new byte[Protocol.LENGTH];
