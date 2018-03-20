@@ -54,7 +54,8 @@ public class MatClient extends Thread {
         protocol.setTime(0);
         protocol.setLoad(false);
         protocol.setRssi((byte) 19);
-        protocol.setReserve(0);
+        protocol.setIntensity((byte) 0);
+        protocol.setReserve(new byte[3]);
         protocol.setTail("MH");
     }
 
@@ -69,7 +70,8 @@ public class MatClient extends Thread {
         protocol.setTime(0);
         protocol.setLoad(false);
         protocol.setRssi((byte) 19);
-        protocol.setReserve(0);
+        protocol.setIntensity((byte) 0);
+        protocol.setReserve(new byte[3]);
         protocol.setTail("MH");
     }
 
@@ -109,7 +111,7 @@ public class MatClient extends Thread {
                             protocol.setTime(protocol.getTime() - 10 > 0 ? protocol.getTime() - 10 : 0);
                         }
 
-//                        System.out.println("发送心跳数据: " + protocol);
+                        System.out.println("发送心跳数据: " + protocol);
 
                         outputStream.write(protocol.toBytes());
                         outputStream.flush();
@@ -129,7 +131,6 @@ public class MatClient extends Thread {
         public void run() {
             try {
                 while (true) {
-                    //间隔10s发送心跳
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -141,17 +142,31 @@ public class MatClient extends Thread {
                         inputStream.read(bytes);
                         Protocol receiveProtocol = new Protocol(bytes);
 
-                        System.out.println("接收启动数据: " + receiveProtocol);
+                        System.out.println("接收启动、调整数据: " + receiveProtocol);
 
                         //如果为启动请求，则返回启动应答数据，1/5的概率按摩垫启动应答失败
                         if (Protocol.TYPE_START == receiveProtocol.getType() && random.nextInt(10) > 1) {
                             protocol.setTime(receiveProtocol.getTime());
 
-                            //构建启动应答数据
+                            //构建启动应答数据,设置类型及力度大小
                             Protocol responseProtocol = new Protocol(protocol.toBytes());
                             responseProtocol.setType(Protocol.TYPE_START_RESPONSE);
+                            responseProtocol.setIntensity(receiveProtocol.getIntensity());
 
                             System.out.println("发送启动响应数据: " + responseProtocol);
+
+                            outputStream.write(responseProtocol.toBytes());
+                            outputStream.flush();
+                        }
+
+                        //如果为调整力度请求，则返回调整力度应答数据，1/5的概率按摩垫启动应答失败
+                        if (Protocol.TYPE_ADJUST == receiveProtocol.getType() && random.nextInt(10) > 1) {
+                            //构建启动应答数据,设置类型及力度大小
+                            Protocol responseProtocol = new Protocol(protocol.toBytes());
+                            responseProtocol.setType(Protocol.TYPE_ADJUST_RESPONSE);
+                            responseProtocol.setIntensity(receiveProtocol.getIntensity());
+
+                            System.out.println("发送调整响应数据: " + responseProtocol);
 
                             outputStream.write(responseProtocol.toBytes());
                             outputStream.flush();

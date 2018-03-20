@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  */
 public class Mat {
 
-    private static final String HOST = "116.62.131.210";
+    private static final String HOST = "120.26.139.183";
 
     private static final int PORT = 8088;
 
@@ -21,13 +21,13 @@ public class Mat {
 
     public static void main(String[] args) throws Exception {
 
-        long msn = 1201708000040l;
+        long msn = 2123456789000000l;
 
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(3000, 4000, 60,
-                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(3000),
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(10, 10, 60,
+                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(10),
                 Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
 
-        for (int i = 0; i < 3000; i++) {
+        for (int i = 0; i < 1; i++) {
             pool.execute(new MatClient(new Socket(HOST, PORT), msn + i));
 //            executor.execute(new MatClient(new Socket(HOST, PORT), msn + i));
             Thread.sleep(1);

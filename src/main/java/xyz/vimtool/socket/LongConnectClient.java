@@ -98,7 +98,8 @@ public class LongConnectClient extends Thread {
         protocol.setTime(0);
         protocol.setLoad(false);
         protocol.setRssi((byte) 31);
-        protocol.setReserve(0);
+        protocol.setIntensity((byte) 0);
+        protocol.setReserve(new byte[3]);
         protocol.setTail("MH");
         bytes = protocol.toBytes();
 //        for (int i = 0; i < 10; i++) {
