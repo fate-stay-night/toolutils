@@ -18,23 +18,11 @@ public class Protocol {
     public static final String HEAD = "LG";
     public static final String TAIL = "MH";
 
-    /** 协议类型（心跳、启动、启动应答、停止、停止应答、查询、查询应答、调节力度，调节应答） */
-    public static final byte TYPE_HEART_BEAT = 0;
+    /** 协议类型（心跳、启动、调节力度，调节感应） */
+    public static final byte TYPE_PULSE = 0;
     public static final byte TYPE_START = 1;
-    public static final byte TYPE_START_RESPONSE = 2;
-    public static final byte TYPE_STOP = 3;
-    public static final byte TYPE_STOP_RESPONSE = 4;
-    public static final byte TYPE_QUERY = 5;
-    public static final byte TYPE_QUERY_RESPONSE = 6;
-    public static final byte TYPE_ADJUST = 7;
-    public static final byte TYPE_ADJUST_RESPONSE = 8;
-
-    /**
-     * 力度大小：轻柔，舒适，劲道
-     */
-    public static final byte INTENSITY_GENTLY = 1;
-    public static final byte INTENSITY_COMFORTABLE = 2;
-    public static final byte INTENSITY_POWERFUL = 3;
+    public static final byte TYPE_ADJUST_INTENSITY = 2;
+    public static final byte TYPE_ADJUST_INDUCE = 3;
 
     public Protocol() {}
 
@@ -49,7 +37,8 @@ public class Protocol {
         this.load = BytesUtils.toBoolean(decryptBytes, 17);
         this.rssi = BytesUtils.toByte(decryptBytes, 18);
         this.intensity = BytesUtils.toByte(decryptBytes, 19);
-        this.reserve = new byte[]{decryptBytes[20], decryptBytes[21], decryptBytes[22]};
+        this.induce = BytesUtils.toByte(decryptBytes, 20);
+        this.reserve = BytesUtils.toShort(decryptBytes, 21);
         this.tail = BytesUtils.toString(decryptBytes, 23, 2);
     }
 
@@ -61,7 +50,7 @@ public class Protocol {
     /**
      * 版本号，1字节
      */
-    private byte version = 1;
+    private byte version = 2;
 
     /**
      * 总长度，1字节
@@ -99,9 +88,14 @@ public class Protocol {
     private byte intensity = 0;
 
     /**
-     * 预留，3字节
+     * 感应，1字节,0-开启，2-关闭
      */
-    private byte[] reserve = {0, 0, 0};
+    private byte induce = 0;
+
+    /**
+     * 预留，2字节
+     */
+    private short reserve = 0;
 
     /**
      * 结束标志，2字节
@@ -180,11 +174,19 @@ public class Protocol {
         this.intensity = intensity;
     }
 
-    public byte[] getReserve() {
+    public byte getInduce() {
+        return induce;
+    }
+
+    public void setInduce(byte induce) {
+        this.induce = induce;
+    }
+
+    public short getReserve() {
         return reserve;
     }
 
-    public void setReserve(byte[] reserve) {
+    public void setReserve(short reserve) {
         this.reserve = reserve;
     }
 
@@ -207,7 +209,8 @@ public class Protocol {
         System.arraycopy(BytesUtils.toBytes(load), 0, result, 17, 1);
         System.arraycopy(BytesUtils.toBytes(rssi), 0, result, 18, 1);
         System.arraycopy(BytesUtils.toBytes(intensity), 0, result, 19, 1);
-        System.arraycopy(reserve, 0, result, 20, 3);
+        System.arraycopy(BytesUtils.toBytes(induce), 0, result, 20, 1);
+        System.arraycopy(BytesUtils.toBytes(reserve), 0, result, 21, 2);
         System.arraycopy(BytesUtils.toBytes(tail), 0, result, 23, 2);
         return encrypt(result);
     }
@@ -228,10 +231,19 @@ public class Protocol {
 
     @Override
     public String toString() {
-        return "Protocol [head = " + head + ", version = " + version
-                + ", length = " + length + ", type = " + type
-                + ", msn = " + msn + ", time = " + time + ", load = " + load
-                + ", rssi = " + rssi + ", intensity = " + intensity
-                + ", reserve = " + reserve[0] + reserve[1] + reserve[2] + ", tail = " + tail + "]";
+        return "Protocol{" +
+                "head='" + head + '\'' +
+                ", version=" + version +
+                ", length=" + length +
+                ", type=" + type +
+                ", msn=" + msn +
+                ", time=" + time +
+                ", load=" + load +
+                ", rssi=" + rssi +
+                ", intensity=" + intensity +
+                ", induce=" + induce +
+                ", reserve=" + reserve +
+                ", tail='" + tail + '\'' +
+                '}';
     }
 }

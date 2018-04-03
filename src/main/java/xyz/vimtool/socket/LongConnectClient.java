@@ -94,12 +94,13 @@ public class LongConnectClient extends Thread {
         protocol.setVersion((byte) 1);
         protocol.setLength((byte) 25);
         protocol.setType((byte) 0);
-        protocol.setMsn(1201708000036l);
+        protocol.setMsn(1201708000036L);
         protocol.setTime(0);
         protocol.setLoad(false);
         protocol.setRssi((byte) 31);
         protocol.setIntensity((byte) 0);
-        protocol.setReserve(new byte[3]);
+        protocol.setIntensity((byte) 0);
+        protocol.setReserve((short) 0);
         protocol.setTail("MH");
         bytes = protocol.toBytes();
 //        for (int i = 0; i < 10; i++) {
