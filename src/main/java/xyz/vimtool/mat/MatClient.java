@@ -144,6 +144,9 @@ public class MatClient extends Thread {
                         if (protocol.getTime() > 0) {
                             if (protocol.getTime() - 10 > 0) {
                                 protocol.setTime(protocol.getTime() - 10);
+                            } else {
+                                protocol.setTime(0);
+                                protocol.setIntensity((byte) 0);
                             }
                         }
 
