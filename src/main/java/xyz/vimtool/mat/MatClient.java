@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 按摩垫Socket客户端线程
@@ -110,13 +111,6 @@ public class MatClient extends Thread {
                 //第一次发送心跳，time字段设为物联网卡号
                 boolean icnIgnore = true;
                 while (true) {
-                    //间隔10s发送心跳
-                    try {
-                        Thread.sleep(10000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
                     if (String.valueOf(protocol.getMsn()).startsWith("2")) {
                         if (!icnIgnore) {
                             //如果按摩垫在使用中，则每次心跳减少运行时间10s
@@ -155,8 +149,11 @@ public class MatClient extends Thread {
                         outputStream.write(protocol.toBytes());
                         outputStream.flush();
                     }
+
+                    //间隔10s发送心跳
+                    TimeUnit.SECONDS.sleep(10);
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -169,11 +166,8 @@ public class MatClient extends Thread {
         public void run() {
             try {
                 while (true) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    TimeUnit.MILLISECONDS.sleep(100);
+
                     //响应服务端发送数据请求
                     if (inputStream.available() > 0) {
                         byte[] bytes = new byte[Protocol.LENGTH];
@@ -217,7 +211,7 @@ public class MatClient extends Thread {
                         }
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
