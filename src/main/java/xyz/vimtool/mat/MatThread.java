@@ -122,6 +122,7 @@ class InfoThread implements Runnable {
             outputStream.write(protocol.toBytes());
             outputStream.flush();
             System.out.println("发送首次心跳数据: " + protocol);
+            protocol.setTime(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -151,7 +152,7 @@ class KeepThread implements Runnable {
                             }
                         }
 
-//                        System.out.println("发送心跳数据: " + protocol);
+                        System.out.println("发送心跳数据: " + protocol);
 
                         outputStream.write(protocol.toBytes());
                         outputStream.flush();
@@ -167,7 +168,7 @@ class KeepThread implements Runnable {
                             }
                         }
 
-//                        System.out.println("发送心跳数据: " + protocol);
+                        System.out.println("发送心跳数据: " + protocol);
 
                         outputStream.write(protocol.toBytes());
                         outputStream.flush();
