@@ -1,9 +1,12 @@
 package xyz.vimtool.socket;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import xyz.vimtool.commons.BytesUtils;
+import xyz.vimtool.commons.StringUtils;
+
+import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * socket长连接client
@@ -16,7 +19,7 @@ public class LongConnectClient extends Thread {
 
     private static final String HOST = "127.0.0.1";
 
-    private static final int PORT = 8088;
+    private static final int PORT = 5987;
 
     private static byte[] bytes;
 
@@ -28,6 +31,11 @@ public class LongConnectClient extends Thread {
 
     LongConnectClient(Socket socket) {
         this.socket = socket;
+        try {
+            this.socket.setOOBInline(true);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -50,16 +58,14 @@ public class LongConnectClient extends Thread {
             try {
                 System.out.println("=====================开始发送心跳包==============");
                 while (true) {
+                    System.out.println("发送心跳数据包");
+                    outStr.write(bytes);
+                    outStr.flush();
                     try {
-                        Thread.sleep(10000);
+                        TimeUnit.MINUTES.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("发送心跳数据包");
-                    for (byte b : bytes) {
-                        System.out.println(b);
-                    }
-                    outStr.write(bytes);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -74,11 +80,10 @@ public class LongConnectClient extends Thread {
             try {
                 System.out.println("==============开始接收数据===============");
                 while (true) {
-                    byte[] b = new byte[1024];
-                    int r = inStr.read(b);
-                    if(r > -1){
-                        String str = new String(b);
-                        System.out.println(str + "[" + Thread.currentThread().getName() + "]");
+                    byte[] b = new byte[1];
+                    if (inStr.read() > -1) {
+                        inStr.read(b);
+                        System.out.println(b.toString());
                     }
                 }
             } catch (IOException e) {
@@ -103,9 +108,7 @@ public class LongConnectClient extends Thread {
         protocol.setReserve((short) 0);
         protocol.setTail("MH");
         bytes = protocol.toBytes();
-//        for (int i = 0; i < 10; i++) {
-            LongConnectClient longConnectClient = new LongConnectClient(new Socket(HOST, PORT));
-            longConnectClient.start();
-//        }
+        LongConnectClient longConnectClient = new LongConnectClient(new Socket(HOST, PORT));
+        longConnectClient.start();
     }
 }
