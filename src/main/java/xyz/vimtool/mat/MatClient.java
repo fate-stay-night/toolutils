@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,6 +39,8 @@ public class MatClient extends Thread {
      * 传输的数据
      */
     private Protocol protocol;
+
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-HH-dd hh-MM-ss");
 
     MatClient() {
     }
@@ -124,7 +128,7 @@ public class MatClient extends Thread {
                             }
                         }
 
-                        System.out.println("发送心跳数据: " + protocol);
+                        System.out.println(simpleDateFormat.format(new Date()) + ": "+ protocol);
 
                         outputStream.write(protocol.toBytes());
                         outputStream.flush();

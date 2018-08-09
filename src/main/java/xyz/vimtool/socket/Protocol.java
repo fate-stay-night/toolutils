@@ -218,9 +218,9 @@ public class Protocol {
     public byte[] encrypt(byte[] bytes) {
         byte[] result = new byte[bytes.length];
         int key = 123;
-        for(int i = 0; i < Protocol.LENGTH; i++) {
+        for (int i = 0; i < Protocol.LENGTH; i++) {
             if (i > 1 && i < Protocol.LENGTH - 2) {
-                result[i] = (byte)(bytes[i] ^ key);
+                result[i] = (byte) (bytes[i] ^ key);
             } else {
                 result[i] = bytes[i];
             }

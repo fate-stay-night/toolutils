@@ -19,15 +19,15 @@ public class MatMain {
 
     public static void main(String[] args) throws Exception {
 
-        long msn = 20190001L;
+        long msn = 24300002L;
 
         int icn = 10000;
 
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(3000, 3000, 60,
-                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(3000),
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 60,
+                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(),
                 Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
 
-        for (int i = 0; i < 3000; i++) {
+        for (int i = 0; i < 1; i++) {
             pool.execute(new MatClient(new Socket(HOST, PORT), msn + i, icn + i));
             TimeUnit.MILLISECONDS.sleep(1);
         }
