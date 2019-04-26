@@ -1,4 +1,4 @@
-package xyz.vimtool;
+package xyz.vimtool.sql;
 
 import java.sql.*;
 

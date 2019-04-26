@@ -110,6 +110,7 @@ public class MatClient extends Thread {
      * 发送心跳包，保持长连接线程
      */
     private class KeepThread implements Runnable {
+        @Override
         public void run() {
             try {
                 //第一次发送心跳，time字段设为物联网卡号

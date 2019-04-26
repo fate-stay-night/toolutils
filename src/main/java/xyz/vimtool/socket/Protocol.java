@@ -2,6 +2,10 @@ package xyz.vimtool.socket;
 
 import xyz.vimtool.commons.BytesUtils;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.concurrent.TimeUnit;
+
 /**
  * 协议
  *
@@ -227,6 +231,47 @@ public class Protocol {
         }
 
         return result;
+    }
+
+    public static int encrypt1(byte[] bytes) {
+        byte[] result = new byte[bytes.length];
+        int key = 123;
+        for (int i = 0; i < bytes.length; i++) {
+            result[i] = (byte) (bytes[i] ^ key);
+        }
+
+        return BytesUtils.toInt(result);
+    }
+
+    public static void main(String[] args) throws Exception {
+        Integer msn = 1;
+
+        Integer key = new Integer(getTimeString());
+        for (int i = 0; i < 100; i++) {
+            int value = (key + msn) ^ msn;
+            System.out.println((value));
+//            System.out.println("++++"  + (value ^ msn));
+            key += 100;
+        }
+    }
+
+    static String getTimeString() {
+        LocalDateTime time = LocalDateTime.now();
+        StringBuilder result = new StringBuilder();
+//        result.append(changeString(time.getMonthValue()));
+        result.append(changeString(time.getMinute()));
+        result.append(changeString(time.getHour()));
+//        result.append(changeString(time.getDayOfMonth()));
+        return result.toString();
+    }
+
+    static String changeString(int value) {
+        String result = String.valueOf(value);
+        if (result.length() == 2) {
+            return result;
+        }
+
+        return "0" + result;
     }
 
     @Override
