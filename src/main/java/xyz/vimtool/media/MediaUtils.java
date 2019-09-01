@@ -40,6 +40,29 @@ public class MediaUtils {
     }
 
     /**
+     * 截取视频第一帧
+     *
+     * @param videoPath 视频地址
+     * @param imagePath 图片地址
+     * @return boolean
+     * @throws Exception exception
+     */
+    public static boolean getImageFromVideo(String videoPath, String imagePath) throws Exception {
+        List<String> cmd = new ArrayList<>();
+        cmd.add(FFMPEG_PATH);
+        cmd.add("-i");
+        cmd.add(videoPath);
+        cmd.add("-vframes");
+        cmd.add("1");
+        cmd.add("-ss");
+        cmd.add("0");
+        cmd.add("-f");
+        cmd.add("image2");
+        cmd.add(imagePath);
+        return execCmd(cmd);
+    }
+
+    /**
      * 剪切视频
      *
      * @param srcPath    源视频路径
@@ -70,6 +93,17 @@ public class MediaUtils {
         cmd.add("-y");
         cmd.add(targetPath);
 
+        return execCmd(cmd);
+    }
+
+    /**
+     * 执行指令
+     *
+     * @param cmd 指令
+     * @return boolean
+     * @throws Exception exception
+     */
+    private static boolean execCmd(List<String> cmd) throws Exception {
         // 调用线程命令
         ProcessBuilder builder = new ProcessBuilder();
         builder.command(cmd);
@@ -78,8 +112,9 @@ public class MediaUtils {
         Process process = builder.start();
 
         // 读取处理输出，防止出现阻塞问题
+        String line;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            while ((reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 // todo 写入日志
             }
         }
