@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- 日志保存路径 -->
+	<property name="LOG_HOME" value="logs" />
+	<!-- 日志记录最低级别:debug,info,warn,error(已按从低到高排序) -->
+	<property name="LOG_MINI_LEVEL" value="info" />
+
+	<!-- Debug日志 -->
+	<appender name="DebugLogAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 文件滚动方案 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 文件名称 -->
+			<fileNamePattern>${LOG_HOME}/DebugLog/%d{yyyy-MM-dd}-%i.log
+			</fileNamePattern>
+			<!-- 保留除今天外前30天的数据 -->
+			<maxHistory>30</maxHistory>
+			<!-- 每个文件的大小,注：文件大小生效前提文件名称中包含 %i 自增长标识,当文件超出最大值时，会自动生成一个而文件,i+1 -->
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<!-- 日志输出格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}
+				-%msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- Info日志 -->
+	<appender name="InfoLogAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 文滚动方案 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 文件名称 -->
+			<fileNamePattern>${LOG_HOME}/InfoLog/%d{yyyy-MM-dd}-%i.log
+			</fileNamePattern>
+			<!-- 保留除今天外前30天的数据 -->
+			<maxHistory>30</maxHistory>
+			<!-- 每个文件的大小,注：文件大小生效前提文件名称中包含 %i 自增长标识,当文件超出最大值时，会自动生成一个而文件,i+1 -->
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<!-- 日志输出格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}
+				-%msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- Ivr日志 -->
+	<appender name="IvrLogAppender"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 文滚动方案 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 文件名称 -->
+			<fileNamePattern>${LOG_HOME}/IvrLog/%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<!-- 保留除今天外前30天的数据 -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<!-- 日志输出格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>logtime:%d{yyyy-MM-dd HH:mm:ss.SSS}|%msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- Warn日志 -->
+	<appender name="WarnLogAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 文件滚动方案 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 文件名称 -->
+			<fileNamePattern>${LOG_HOME}/WarnLog/%d{yyyy-MM-dd}-%i.log
+			</fileNamePattern>
+			<!-- 保留除今天外前30天的数据 -->
+			<maxHistory>30</maxHistory>
+			<!-- 每个文件的大小,注：文件大小生效前提文件名称中包含 %i 自增长标识,当文件超出最大值时，会自动生成一个而文件,i+1 -->
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<!-- 日志输出格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}
+				-%msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- Error日志 -->
+	<appender name="ErrorLogAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 文件滚动方案 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 文件名称 -->
+			<fileNamePattern>${LOG_HOME}/ErrorLog/%d{yyyy-MM-dd}-%i.log
+			</fileNamePattern>
+			<!-- 保留除今天外前30天的数据 -->
+			<maxHistory>30</maxHistory>
+			<!-- 每个文件的大小,注：文件大小生效前提文件名称中包含 %i 自增长标识,当文件超出最大值时，会自动生成一个而文件,i+1 -->
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<!-- 日志输出格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}
+				-%msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+		<!-- Trace日志 -->
+	<appender name="TraceLogAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 文件滚动方案 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 文件名称 -->
+			<fileNamePattern>${LOG_HOME}/TraceLog/%d{yyyy-MM-dd}-%i.log
+			</fileNamePattern>
+			<!-- 保留除今天外前30天的数据 -->
+			<maxHistory>30</maxHistory>
+			<!-- 每个文件的大小,注：文件大小生效前提文件名称中包含 %i 自增长标识,当文件超出最大值时，会自动生成一个而文件,i+1 -->
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<!-- 日志输出格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}
+				-%msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- loggers -->
+	<logger name="TraceLog" additivity="false">
+		<level value="trace" />
+		<appender-ref ref="TraceLogAppender" />
+	</logger>
+
+	<logger name="DebugLog" additivity="false">
+		<level value="${LOG_MINI_LEVEL}"/>
+		<appender-ref ref="DebugLogAppender" />
+	</logger>
+
+	<logger name="InfoLog" additivity="false">
+		<level value="${LOG_MINI_LEVEL}" />
+		<appender-ref ref="InfoLogAppender" />
+	</logger>
+
+<!--	互动式语音应答日志-->
+	<logger name="IvrLog" additivity="false">
+		<level value="${LOG_MINI_LEVEL}" />
+		<appender-ref ref="IvrLogAppender" />
+	</logger>
+
+	<logger name="WarnLog" additivity="false">
+		<level value="${LOG_MINI_LEVEL}" />
+		<appender-ref ref="WarnLogAppender" />
+	</logger>
+
+	<logger name="ErrorLog" additivity="false">
+		<level value="${LOG_MINI_LEVEL}" />
+		<appender-ref ref="ErrorLogAppender" />
+	</logger>
+
+<!--	<root level="debug">-->
+<!--		<appender-ref ref="CONSOLE"/>-->
+<!--		<appender-ref ref="DebugLogAppender"/>-->
+<!--	</root>-->
+</configuration>

@@ -123,10 +123,21 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--日志依赖包，slf4j + logback-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.28</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.2.3</version>
         </dependency>
 
         <dependency>
@@ -142,11 +153,23 @@
             <version>2.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.11</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>5.1.9.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aparapi</groupId>
+            <artifactId>aparapi</artifactId>
+            <version>1.10.0</version>
         </dependency>
     </dependencies>
 

@@ -41,9 +41,9 @@ public class RestTemplateTest {
 //		ByteArrayResource contentsAsResource = new ByteArrayResource(content);
         HttpEntity<HttpHeaders> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> exchange = restTemplate.exchange(reqUrl, HttpMethod.PUT, entity, String.class);
+    ResponseEntity<String> exchange = restTemplate.exchange(reqUrl, HttpMethod.PUT, entity, String.class);
         return exchange.getBody();
-    }
+}
 
     private static ClientHttpRequestFactory createFactory() {
         HttpClient httpClient = httpClient();
