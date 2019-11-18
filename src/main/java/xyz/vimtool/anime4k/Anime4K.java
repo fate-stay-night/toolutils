@@ -32,11 +32,11 @@ public class Anime4K {
 
 
         String inputFile = "/Users/xiao/Desktop/jj.png";
-        String outputFile = "/Users/xiao/Desktop/jjjj.png";
+        String outputFile = "/Users/xiao/Desktop/jjj100.png";
         BufferedImage img = ImageIO.read(new File(inputFile));
         img = copyType(img);
 
-        float scale = 4f;
+        float scale = 10f;
 
         if (args.length >= 3) {
             scale = Float.parseFloat(args[2]);
@@ -68,6 +68,7 @@ public class Anime4K {
         newImage.getGraphics().drawImage(bi, 0, 0, null);
         return newImage;
     }
+
     static BufferedImage scale(BufferedImage bi, int width, int height) {
         BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = (Graphics2D)newImage.getGraphics();

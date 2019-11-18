@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * 视频剪切公用类
@@ -17,6 +18,15 @@ import java.util.Objects;
  * @date    2019-08-15
  */
 public class MediaUtils {
+
+    public static void main(String[] args) {
+        String[] names = {"Bob", "Alice", "Grace"};
+        StringJoiner sj = new StringJoiner(", ");
+        for (String name : names) {
+            sj.add(name);
+        }
+        System.out.println(sj.toString());
+    }
 
     /**
      * ffmpeg程序路径
