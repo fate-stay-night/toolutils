@@ -1,6 +1,6 @@
 package xyz.vimtool.redis;
 
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import lombok.Data;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.dao.DataAccessException;
@@ -26,17 +26,17 @@ import java.util.UUID;
 public class RedisMain {
 
     public static void main(String[] args) {
-        RedisTemplate<String, Object> redisTemplate = redisTemplate(jedisFactory());
+        RedisTemplate<String, Object> redisTemplate = redisTemplate(lettuceFactory());
         String redisKey = "pipeline:test";
         byte[] redisKeyBytes = redisKey.getBytes();
 
         List<Node> nodes = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
             nodes.add(new Node());
         }
         redisTemplate.opsForList().rightPushAll(redisKey, nodes.toArray(new Node[0]));
 
-        List<Object> nodes1 = redisTemplate.executePipelined(new SessionCallback<Node>() {
+        List<Object> nodes1 = redisTemplate.executePipelined(new SessionCallback<Object>() {
             @Override
             public Node execute(RedisOperations operations) throws DataAccessException {
                 ListOperations ops = operations.opsForList();
@@ -47,7 +47,7 @@ public class RedisMain {
             }
         });
 
-        List<Object> nodes2 = redisTemplate.executePipelined((RedisCallback<Node>) connection -> {
+        List<Object> nodes2 = redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             connection.openPipeline();
             for (int i = 0; i < 50; i++) {
                 connection.listCommands().lPop(redisKeyBytes);
@@ -78,7 +78,8 @@ public class RedisMain {
         // 使用StringRedis序列化
         StringRedisSerializer stringSerializer = new StringRedisSerializer();
         // 使用fastjson序列化
-        FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+//        FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+        GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
 
         redisTemplate.setConnectionFactory(factory);
 
@@ -109,13 +110,17 @@ public class RedisMain {
         config.setPort(6397);
         config.setPassword("passwd_redis");
         LettuceConnectionFactory factory = new LettuceConnectionFactory(config, getLettucePool());
+        factory.afterPropertiesSet();
         return factory;
     }
 
     public static LettucePoolingClientConfiguration getLettucePool() {
         LettucePoolingClientConfiguration.LettucePoolingClientConfigurationBuilder builder = LettucePoolingClientConfiguration.builder();
+//        builder.commandTimeout(Duration.ofSeconds(15));
         builder.poolConfig(getRedisConfig());
-        return builder.build();
+//        builder.shutdownTimeout(Duration.ZERO);
+        LettucePoolingClientConfiguration pool = builder.build();
+        return pool;
     }
 
     public static GenericObjectPoolConfig getRedisConfig() {

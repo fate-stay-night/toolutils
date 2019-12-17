@@ -1,4 +1,4 @@
-package xyz.vimtool.commons;
+package xyz.vimtool.concurrent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
