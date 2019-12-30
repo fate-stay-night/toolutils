@@ -1,9 +1,8 @@
 package xyz.vimtool.socket;
 
-import xyz.vimtool.commons.BytesUtils;
-import xyz.vimtool.commons.StringUtils;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.TimeUnit;
@@ -52,8 +51,10 @@ public class LongConnectClient extends Thread {
         tReceive.start();
     }
 
-    //保持长连接线程
+    // 保持长连接线程
     private class KeepThread implements Runnable {
+
+        @Override
         public void run() {
             try {
                 System.out.println("=====================开始发送心跳包==============");
@@ -74,8 +75,10 @@ public class LongConnectClient extends Thread {
         }
     }
 
-    //接收传输数据线程
+    // 接收传输数据线程
     private class ReceiveThread implements Runnable {
+
+        @Override
         public void run() {
             try {
                 System.out.println("==============开始接收数据===============");
@@ -94,20 +97,7 @@ public class LongConnectClient extends Thread {
     }
 
     public static void main(String[] args) throws Exception {
-        Protocol protocol = new Protocol();
-        protocol.setHead("LG");
-        protocol.setVersion((byte) 1);
-        protocol.setLength((byte) 25);
-        protocol.setType((byte) 0);
-        protocol.setMsn(1201708000036L);
-        protocol.setTime(0);
-        protocol.setLoad(false);
-        protocol.setRssi((byte) 31);
-        protocol.setIntensity((byte) 0);
-        protocol.setIntensity((byte) 0);
-        protocol.setReserve((short) 0);
-        protocol.setTail("MH");
-        bytes = protocol.toBytes();
+        bytes = "jjj".getBytes();
         LongConnectClient longConnectClient = new LongConnectClient(new Socket(HOST, PORT));
         longConnectClient.start();
     }
