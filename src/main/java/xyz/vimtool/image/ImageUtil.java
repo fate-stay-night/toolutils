@@ -24,9 +24,9 @@ public class ImageUtil {
 
 //        zoomTo400("/Users/xiao/Desktop/testimage.jpeg", "/Users/xiao/Desktop/testimage2.jpeg", 640, 480);
 
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(getByte(new File("/Users/xiao/Desktop/test1.jpg")));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(getByte(new File("/Users/xiao/Desktop/WechatIMG86.jpeg")));
 //        BufferedImage read = ImageIO.read(inputStream);
-        FileOutputStream out = new FileOutputStream(new File("/Users/xiao/Desktop/test2.jpg"));
+        FileOutputStream out = new FileOutputStream(new File("/Users/xiao/Desktop/test3.jpg"));
 //        changeSize(inputStream, out, 640, 480);
 //        zoomAndFill(inputStream, out, 640, 480);
 //        cut(inputStream, out, 5);

@@ -19,23 +19,24 @@ import java.nio.ByteBuffer;
 public class VideoUtils {
 
     public static void main(String[] args) throws Exception {
-        File file = new File("/Users/xiao/Desktop/dd.mp4");
-        FileInputStream stream = new FileInputStream(file);
-//        ByteArrayInputStream byteStream = new ByteArrayInputStream("st".getBytes());
+        File file = new File("/Users/xiao/Desktop/1582344694496.mp4");
+        FFmpegFrameGrabber grabber = FFmpegFrameGrabber.createDefault(file);
+        grabber.start();
+        System.out.println(grabber.getVideoMetadata("rotate"));
+        System.out.println(grabber.getImageWidth());
+        System.out.println(grabber.getImageHeight());
 
         // 截取视频首帧图片，javacv
-        FFmpegFrameGrabber ffmpegFrameGrabber = new FFmpegFrameGrabber(stream);
-        ffmpegFrameGrabber.start();
 
         //截取首帧图片
-        Frame frame = ffmpegFrameGrabber.grabFrame();
+        Frame frame = grabber.grabFrame();
 
         //首帧无图像时，继续截取，直到有图像
         if (frame.image == null) {
             int i = 0;
-            int length = ffmpegFrameGrabber.getLengthInFrames();
+            int length = grabber.getLengthInFrames();
             while (i < length) {
-                frame = ffmpegFrameGrabber.grabFrame();
+                frame = grabber.grabFrame();
                 if (frame.image != null) {
                     break;
                 }
@@ -43,7 +44,7 @@ public class VideoUtils {
         }
         Java2DFrameConverter frameConverter = new Java2DFrameConverter();
         BufferedImage bufferedImage = frameConverter.getBufferedImage(frame);
-        ffmpegFrameGrabber.stop();
+        grabber.stop();
 //        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         FileOutputStream outputStream = new FileOutputStream(new File("/Users/xiao/Desktop/ddd.jpg"));
         ImageIO.write(bufferedImage, "jpg", outputStream);
