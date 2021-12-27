@@ -36,7 +36,7 @@ public class ThreadUtils {
         BufferedReader input = null;
         BufferedReader error = null;
         try {
-            process = Runtime.getRuntime().exec(list.toArray(new String[list.size()]));
+            process = Runtime.getRuntime().exec(list.toArray(new String[0]));
 
             input = new BufferedReader(
                     new InputStreamReader(process.getInputStream()));
@@ -47,11 +47,11 @@ public class ThreadUtils {
             while (true) {
                 String line = input.readLine();
                 if (line != null) {
-                    result.append(line + "\n");
+                    result.append(line).append("\n");
                 } else {
                     line = error.readLine();
                     if (line != null) {
-                        result.append(line + "\n");
+                        result.append(line).append("\n");
                     } else {
                         break;
                     }

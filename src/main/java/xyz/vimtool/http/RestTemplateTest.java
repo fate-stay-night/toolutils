@@ -1,6 +1,6 @@
 package xyz.vimtool.http;
 
-import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
@@ -11,12 +11,12 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.FileOutputStream;
@@ -25,6 +25,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * 
@@ -54,22 +60,81 @@ public class RestTemplateTest {
         return exchange.getBody();
     }
 
-    public static void main(String[] args) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        MultiValueMap<String, Object> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.add("photo", new FileSystemResource("/Users/xiao/Desktop/kjk.jpg"));
-        multiValueMap.add("productNo", "123rdafae134");
-        multiValueMap.add("channelNo", "123rafae134");
-        multiValueMap.add("traceId", "123re1adad34");
-        multiValueMap.add("resId", "23");
-        multiValueMap.add("operatorName", "123dadadre134");
-        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(multiValueMap, headers);
-        ResponseEntity<JSONObject> exchange = restTemplate.exchange("http://127.0.0.1:8080/bizinterface_innerservice/worksmanage/addaivideo",
-                HttpMethod.POST, entity, JSONObject.class);
-        System.out.printf("exchange");
+    public static void main(String[] args) throws Exception {
+//        File file = new File("/Users/xiao/Pictures/timg.jpeg");
+//        byte[] content = FileUtils.readFileToByteArray(file);
+//        String url = "http://oss.xfinfr.com/11W2MYCO/rescloud1/test.jpg";
+//        String md5 = DigestUtils.md5Hex(content);
+//        HttpHeaders headers = new HttpHeaders();
+//		headers.add("Content-MD5", md5);
+//        HttpEntity<byte[]> entity = new HttpEntity<>(content, headers);
+//        ResponseEntity<String> exchange = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+//        System.out.println(exchange.getBody());
+
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        List<Future<String>> futures = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            Future<String> future = executorService.submit(() -> {
+//                return restTemplate.postForObject("http://127.0.0.1:8889/api/app/record/wine/notify/ada", null, String.class);
+                return restTemplate.postForObject("http://127.0.0.1:8083/start/thread", null, String.class);
+            });
+            futures.add(future);
+        }
+
+        while (CollectionUtils.isNotEmpty(futures)) {
+            Iterator<Future<String>> iterator = futures.iterator();
+            while (iterator.hasNext()) {
+                Future<String> next = iterator.next();
+                if (next.isDone()) {
+                    iterator.remove();
+                    System.out.println(next.get());
+                }
+            }
+        }
+        executorService.shutdownNow();
+        System.out.println("over");
+
+//        for (int i = 755369; i <= 999999; i++) {
+//            if (i % 30 == 0) {
+//                TimeUnit.SECONDS.sleep(60);
+//            }
+//            String s = String.format("%06d", i);
+//            String result = null;
+//            try {
+//                result = restTemplate.getForObject("https://www.meipian.cn/app/http/transpwd.php?id=300g6mel&pwd=" + s, String.class);
+//            } catch (RestClientException e) {
+//                System.out.println(s + "  " + e.getMessage());
+//            }
+//
+//            if (Objects.isNull(result)) {
+//                continue;
+//            }
+//            if (!result.contains("访问失败")) {
+//                System.out.println(result);
+//                System.out.println("查找成功，" + s);
+//                break;
+//            }
+//            System.out.println(s);
+//            TimeUnit.MILLISECONDS.sleep(100);
+//        }
     }
+
+//    public static void main(String[] args) {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//        MultiValueMap<String, Object> multiValueMap = new LinkedMultiValueMap<>();
+//        multiValueMap.add("photo", new FileSystemResource("/Users/xiao/Desktop/kjk.jpg"));
+//        multiValueMap.add("productNo", "123rdafae134");
+//        multiValueMap.add("channelNo", "123rafae134");
+//        multiValueMap.add("traceId", "123re1adad34");
+//        multiValueMap.add("resId", "23");
+//        multiValueMap.add("operatorName", "123dadadre134");
+//        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(multiValueMap, headers);
+//        ResponseEntity<JSONObject> exchange = restTemplate.exchange("http://127.0.0.1:8080/bizinterface_innerservice/worksmanage/addaivideo",
+//                HttpMethod.POST, entity, JSONObject.class);
+//        System.out.printf("exchange");
+//    }
 
     private static ClientHttpRequestFactory createFactory() {
         HttpClient httpClient = httpClient();
